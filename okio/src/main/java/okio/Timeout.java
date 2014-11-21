@@ -142,9 +142,10 @@ public class Timeout {
    * operation.
    */
   public void throwIfReached() throws IOException {
-    if (Thread.interrupted()) {
-      throw new InterruptedIOException();
-    }
+      // XXX: Disable check to avoid application threading problem. see https://github.com/square/okio/issues/81
+//    if (Thread.interrupted()) {
+//      throw new InterruptedIOException();
+//    }
 
     if (hasDeadline && System.nanoTime() > deadlineNanoTime) {
       throw new IOException("deadline reached");

@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+def artifactId = 'okio'
+def groupId    = 'com.squareup.okio'
+def version    = '4.0.0-customized'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.mojo:animal-sniffer-annotations:1.11'
+}
+
+artifacts {
+    archives file("build/libs/${artifactId}.jar")
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri("file://${ System.getProperty('user.home') }/project/android-Repository"))
+
+            def id = artifactId
+
+            addFilter(id) { artifact, file ->
+                artifact.name == id
+            }
+            pom(id).groupId    = groupId
+            pom(id).artifactId = id
+            pom(id).version    = version
+        }
+    }
+}
